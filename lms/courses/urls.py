@@ -18,4 +18,6 @@ urlpatterns = [
     path('instructor-course-update/<str:uuid>/', views.InstructorCourseUpdateView.as_view(), name='instructor-course-update'),
 
     
+
+    
 ]
