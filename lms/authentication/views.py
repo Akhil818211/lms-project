@@ -6,6 +6,10 @@ from django.views import View
 
 from .forms import LoginForm
 
+
+# from authentication.permission import permission_roles
+
+
 # Create your views here.
 
 class LoginView(View):
@@ -59,5 +63,22 @@ class LogoutView(View):
         logout(request)
 
         return redirect('course-list') 
+    
+class RegisterChoicesView(View):
+
+    def get(self, request, *args, **kwargs):
 
 
+        return render(request, 'authentication/register-choices.html')
+    
+    def post(self, request, *args, **kwargs):
+
+        role = request.POST.get('role')
+
+        if role == 'student':
+
+            return redirect('student-register')
+        
+        elif role == 'instructor':
+
+            return redirect('instructor-register')
