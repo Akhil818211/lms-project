@@ -1,11 +1,12 @@
+
 from . import views
 
 from django.urls import path
 
 urlpatterns = [
     path('courses-list/', views.CoursesListView.as_view(), name='course-list'),
-
-    path('course-detail/<str:uuid>/', views.CoursesDetailView.as_view(), name='course-detail'),
+    
+    path('course-detail/<str:uuid>/',views.CoursesDetailView.as_view(), name ='course-detail'),
 
     path('home/',views.HomeView.as_view(), name ='home'),
 
@@ -17,7 +18,7 @@ urlpatterns = [
     
     path('instructor-course-delete/<str:uuid>/', views.CourseDeleteView.as_view(), name='instructor-course-delete'),
     
-    path('instructor-course-update/<str:uuid>/', views.InstructorCourseUpdateView.as_view(), name='instructor-course-update'),
+    path('instructor-course-update/<str:uuid>/', views.InatructorCourseUpdateView.as_view(), name='instructor-course-update'),
 
     
 ]

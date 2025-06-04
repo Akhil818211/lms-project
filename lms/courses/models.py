@@ -14,7 +14,7 @@ category_choice = [
 ]
 
 
-class BaseClass(models.Model):
+class BaseModelClass(models.Model):
 
     uuid = models.SlugField(unique=True,default =uuid.uuid4)
 
@@ -54,7 +54,7 @@ class CategoryChoices(models.TextChoices):
 
     MARKETING = 'Marketing','Marketing'
 
-class Courses(BaseClass):
+class Courses(BaseModelClass):
 
     title = models.CharField(max_length=50)
 
@@ -71,6 +71,7 @@ class Courses(BaseClass):
     
     category = models.CharField(max_length=25, choices =CategoryChoices.choices) # defining using class CategoryChoice
 
+    tags = models.TextField()
 
     level = models.CharField(max_length=25,choices=LevelChoices.choices)
 
@@ -91,4 +92,3 @@ class Courses(BaseClass):
         verbose_name_plural = 'Courses'
 
         ordering = ['id']
-

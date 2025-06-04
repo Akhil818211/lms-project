@@ -1,38 +1,38 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect
 
 from django.views import View
 
-from .forms import InstructorForm
+from students.forms import ProfileForm
 
-from django.db import  transaction
+from instructors.forms import InstructorForm
+
+from django.db import transaction
+
+from django.contrib.auth.hashers import make_password
 
 import threading
 
 from lms.utility import send_email
 
-from django.contrib.auth.hashers import make_password
-
-from students.forms import ProfileForm
-
 # Create your views here.
+
 class InstructorRegisterView(View):
 
-
-    def get(self, request, *args, **kwargs):
+    def get(self,request,*args,**kwargs):
 
         profile_form = ProfileForm()
 
         instructor_form = InstructorForm()
 
-        data = {
+        data ={
             'profile_form' : profile_form,
             'instructor_form' : instructor_form
         }
 
-
-        return render(request,'instructors/instructor-register.html', context=data)
-
-
+        return render(request,'instructors/instructor-register.html',context=data)
+    
+    
+    
     def post(self, request, *args , **kwrgs):
 
         profile_form = ProfileForm(request.POST)
@@ -72,30 +72,33 @@ class InstructorRegisterView(View):
 
                     instructor.name = f' {profile.first_name} {profile.last_name}'
 
-
                     instructor.save()
-
-                    subject = 'Successfully Registered !!!'
-
-                    recepient = instructor.profile.email
                     
+                    # Send email notification
+                    subject = 'Successfully registered'
+
+                    recipient = instructor.profile.email
+
                     template = 'email/success-registration.html'
 
-                    context = {'name':instructor.name,'username':instructor.profile.email,'password':password}
+                    context = {
+                        'name': instructor.name,
+                        'email': instructor.profile.email,
+                        'password': password
+                    }
 
-                    thread = threading.Thread(target=send_email,args=(subject,recepient,template,context))
+                    thread = threading.Thread(target=send_email,args=(subject,recipient,template,context))
 
                     thread.start()
 
-                    # send_email(subject,recepient,template,context)
+                    # send_email(subject, recipient, template, context)
 
 
-                    
                     return redirect('login')
             
         data = {
                 'profile_form' : profile_form,
-                'student_form' : instructor_form
+                'student_form' : instructor_form,
             }
             
         return render(request, 'instructors/instructor-register.html', context=data)

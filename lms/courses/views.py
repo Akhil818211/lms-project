@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 
 from .models import Courses,CategoryChoices,LevelChoices
@@ -16,7 +17,7 @@ from django.utils.decorators import method_decorator
 
 from authentication.permission import permission_roles
 
-
+from lms.utility import get_recommended_courses
 
 # Create your views here.
 
@@ -50,6 +51,8 @@ class CoursesListView(View):
         }
         return render(request, 'courses/courses-list.html', context= data)
     
+
+
 class CoursesDetailView(View):
 
     def get(self, request , *args , **kwargs):
@@ -58,13 +61,16 @@ class CoursesDetailView(View):
 
         course = Courses.objects.get(uuid=uuid)
 
+        recomended_courses = get_recommended_courses(course)
+
         data = {
-            'course' : course
+            'course' : course,
+            'recomended_courses' : recomended_courses
         }
 
+
         return render(request,'courses/course-detail.html', context= data)
-
-
+    
 
 class HomeView(View):
 
@@ -76,13 +82,9 @@ class HomeView(View):
         
 
         return render(request, 'courses/home.html', context=data)
+#@method_decorator(login_required(login_url='login'),name='dispatch')
 
-# @login_required(login_url='login')
-
-# @method_decorator(login_required(login_url='login'),name='dispatch')
-
-@method_decorator(permission_roles(roles=['Instructor']),name='dispatch')
-
+@method_decorator(permission_roles(roles=['Instructor']), name='dispatch')
 class InstructorCourseListView(View):
 
     def get(self, request, *args, **kwargs):
@@ -91,7 +93,7 @@ class InstructorCourseListView(View):
 
         print(query)
 
-        instructor = Instructors.objects.get(id = 1)
+        instructor = Instructors.objects.get(profile= request.user)
 
         courses = Courses.objects.filter(instructor =instructor)
 
@@ -112,12 +114,15 @@ class InstructorCourseListView(View):
             'courses' : courses}        
         
         return render(request, 'courses/instructor-courses-list.html', context=data)
-    
-  
-# @method_decorator(login_required(login_url='login'),name='dispatch')      
-@method_decorator(permission_roles(roles=['Instructor']),name='dispatch')
 
-class InstructorCourseUpdateView(View):
+
+
+
+    
+# @method_decorator(login_required(login_required='login'),name='dispatch')
+
+@method_decorator(permission_roles(roles=['Instructor']), name='dispatch')
+class InatructorCourseUpdateView(View):
 
     def get(self, request , *args, **kwargs):
 
@@ -151,11 +156,9 @@ class InstructorCourseUpdateView(View):
             data = { 'form' : form }
 
             return render( request, 'courses/instructor-course-update.html', context=data)
-    
+# @method_decorator(login_required(login_required='login'),name='dispatch')
 
-# @method_decorator(login_required(login_url='login'),name='dispatch')
-@method_decorator(permission_roles(roles=['Instructor']),name='dispatch')
-
+@method_decorator(permission_roles(roles=['Instructor']), name='dispatch')
 class InstructorCoursesDetailView(View):
 
     def get(self, request , *args , **kwargs):
@@ -171,8 +174,51 @@ class InstructorCoursesDetailView(View):
         return render(request,'courses/instructor-course-detail.html', context= data)
 
 
-# @method_decorator(login_required(login_url='login'),name='dispatch')
-@method_decorator(permission_roles(roles=['Instructor']),name='dispatch')
+# class CourseCreateView(View):
+
+#     def get(self , request , *args , **kwargs):
+            
+#         data ={
+#             'categories': CategoryChoices,
+#             'levels': LevelChoices,
+#                 }
+
+#         return render (request, 'courses/create-course.html', context=data)
+    
+#     def post(self, request, *args, **kwargs):
+
+#             form_data = request.POST
+
+#             image = request.FILES.get('image')
+
+#             title = form_data.get('title')
+       
+#             description = form_data.get('description')
+
+#             category = form_data.get('category')
+
+#             level = form_data.get('level')
+
+#             fees = form_data.get('fees')
+
+#             offer_fee = form_data.get('offer_fee')
+
+#             instructor = 'John Doe'
+
+#             print(title, description,category,level,image,fees,offer_fee)
+
+#             course = Courses.objects.create(title=title,description=description , image=image,
+#                                    category=category,level=level, instructor=instructor,
+#                                    fees=fees, offer_fee=offer_fee)
+#             course.save()
+
+#             return redirect('instructor-courses-list')
+
+
+
+# with the help of Django-forms
+
+
 
 class CourseCreateView(View):
 
@@ -218,12 +264,10 @@ class CourseCreateView(View):
         data = {'form': form }
         print(form.errors)
         return render (request, 'courses/create-course.html', context=data)
+    
+# @method_decorator(login_required(login_required='login'),name='dispatch')
 
-
-# @method_decorator(login_required(login_url='login'),name='dispatch')
-
-@method_decorator(permission_roles(roles=['Instructor']),name='dispatch')
-
+@method_decorator(permission_roles(roles=['Instructor']), name='dispatch')
 class CourseDeleteView(View):
 
 

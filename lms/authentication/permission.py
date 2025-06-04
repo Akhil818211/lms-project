@@ -1,22 +1,19 @@
 from django.shortcuts import redirect
 
+
 # @permission_roles(roles=['Instructor'])
-
-#permission decorator
-
 def permission_roles(roles):
 
-    def decorator(fn):
+    def decorator(func):
 
-        def wrapper(request,*args,**kwargs):
+        def wrapper(request, *args, **kwargs):
 
             if request.user.is_authenticated and request.user.role in roles :
-                
-                return fn(request,*args,**kwargs)
+
+                    return func(request, *args, **kwargs)
+        
+            return redirect('login')
     
-            return redirect ('login')
-    
-    
-        return wrapper 
-    
+
+        return wrapper
     return decorator

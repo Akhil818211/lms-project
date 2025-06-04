@@ -1,14 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User
+from courses.models import BaseModelClass
 
-from courses.models import BaseClass
 
-# Create your models here.
+class AreaOfExpertise(BaseModelClass):
 
-class AreaOfExpertise(BaseClass):
-
-    area = models.CharField(max_length=30)
+    area = models.CharField(max_length=20)
 
     def __str__(self):
+
         return self.area
     
     class Meta:
@@ -17,7 +17,10 @@ class AreaOfExpertise(BaseClass):
 
         verbose_name_plural = 'Area of Expertise'
 
-class Instructors(BaseClass):
+
+
+
+class Instructors(BaseModelClass):
 
     profile = models.OneToOneField('authentication.Profile', on_delete=models.CASCADE)
 
@@ -27,13 +30,11 @@ class Instructors(BaseClass):
 
     description = models.TextField()
 
-    area_of_expertise =models.ForeignKey('AreaOfExpertise', on_delete=models.SET_NULL, null=True)
+    area_of_expertise = models.ForeignKey('AreaOfExpertise',on_delete=models.SET_NULL,null=True)
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
-
-        verbose_name = 'Instructors'
-
+        verbose_name = 'Instructor'
         verbose_name_plural = 'Instructors'

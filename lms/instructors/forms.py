@@ -1,7 +1,6 @@
-from django import forms
+from django import forms 
 
-from . models import Instructors,AreaOfExpertise
-
+from .models import Instructors,AreaOfExpertise
 
 
 class InstructorForm(forms.ModelForm):
@@ -19,18 +18,20 @@ class InstructorForm(forms.ModelForm):
                                                     'class' :   'form-control',
                                                     'required'  :   'required'
                                                 }),
-            'description'    :   forms.Textarea(attrs={
+                                                
+            'description' : forms.Textarea(attrs={
                                                     'class' :   'form-control',
                                                     'required'  :   'required',
+                                                    'rows':'6',
+                                                    'cols':'15'
+                                                }),
 
-                                                    'rows': '6',
-                                                    'cols' : '6'
-                                                })}
+            }
         
-        area_of_expertise    =  forms.ModelChoiceField(queryset=AreaOfExpertise.objects.all(),
-                                                  widget=forms.Select(attrs={
-                                                      'class' :   'form-select',
-                                                      'required'  :   'required'
-                                                  }))
-            
-        
+
+        area_of_expertise = forms.ModelChoiceField(queryset=AreaOfExpertise.objects.all(),widget=forms.Select(attrs={
+
+                                                     'class' :   'form-control',
+                                                     'required'  :   'required',
+
+                                                }))

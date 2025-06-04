@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+
+from decouple import config 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,8 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            
-            'builtins':['authentication.templatetags.check_roles']
+            'builtins' : ['authentication.templatetags.check_roles']
         },
     },
 ]
@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'authentication.Profile' 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -124,31 +125,28 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS=['static']
+STATICFILES_DIRS = ['static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# media  root and url 
+# media root and url 
 
 MEDIA_ROOT = 'media'
 
 MEDIA_URL = '/media/'
 
-# settings for customized user model
 
-AUTH_USER_MODEL = 'authentication.Profile'
-
+LOGIN_URL = 'login' 
 
 
-# email settings 
+# email settings
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST ='smtp.gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
 
 EMAIL_PORT = 587
 

@@ -1,7 +1,8 @@
+
 from django.db import models
 
 # Create your models here.
-from courses.models import BaseClass
+from courses.models import BaseModelClass
 
 class QualificationChoices(models.TextChoices):
 
@@ -17,7 +18,7 @@ class QualificationChoices(models.TextChoices):
 
     PHD = 'PHD', 'PHD'
 
-class Students(BaseClass):
+class Students(BaseModelClass):
 
     profile = models.ForeignKey('authentication.Profile', on_delete=models.CASCADE)
 
